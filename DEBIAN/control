@@ -1,0 +1,9 @@
+Package: monitoring-agent
+Version: 1.0
+Section: net
+Priority: optional
+Architecture: all
+Essential: no
+Installed-Size: 1024
+Maintainer: monitoring-agent@codeweavers.net
+Description: Monitoring-Agent
