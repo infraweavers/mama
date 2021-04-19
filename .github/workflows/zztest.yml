@@ -1,6 +1,6 @@
 name: zztest
 
-on: [workflow_dispatch]
+on: [push]
 
 jobs:
 
