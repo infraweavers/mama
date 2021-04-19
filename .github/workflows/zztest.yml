@@ -28,7 +28,7 @@ jobs:
 
       - name: Dependencies & Build
         run: |
-          os=ubuntu
+          os=linux
           arch=amd64
           goversion=1.16
           echo "Building $os-$arch-$goversion"
