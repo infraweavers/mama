@@ -28,33 +28,21 @@ jobs:
 
       - name: Dependencies & Build
         run: |
-          $os="ubuntu"
-          $arch="amd64"
-          $goversion="1.16.x"
-          Write-Host "Building $os-$arch-$goversion"
+          os=ubuntu
+          arch=amd64
+          goversion=1.16
+          echo "Building $os-$arch-$goversion"
           
-          $suffix=".exe"
-          New-Item -Type Directory ./release/$os-$arch-$goversion
-          @( 
-            "${{ env.SRCPATH }}/installService.cmd",
-            "${{ env.SRCPATH }}/uninstallService.cmd",
-            "${{ env.SRCPATH }}/configuration.ini",
-            "${{ env.SRCPATH }}/LICENSE",
-            "${{ env.SRCPATH }}/server.crt",
-            "${{ env.SRCPATH }}/server.key",
-            "${{ env.SRCPATH }}/README.md",
-            "${{ env.SRCPATH }}/cacert.pem"
-          ) | ForEach-Object { Copy-Item -Path $_ -Destination  .\release\$os-$arch-$goversion }
+          suffix=$([ "$os" == "windows" ] && echo ".exe" || echo "")
+          mkdir -p ./release/$os-$arch-$goversion
+          cp ${{ env.SRCPATH }}/installService.cmd ${{ env.SRCPATH }}/uninstallService.cmd ${{ env.SRCPATH }}/configuration.ini ${{ env.SRCPATH }}/LICENSE ${{ env.SRCPATH }}/server.crt ${{ env.SRCPATH }}/server.key ${{ env.SRCPATH }}/README.md ${{ env.SRCPATH }}/cacert.pem ./release/$os-$arch-$goversion
           
-          Push-Location -Path ${{ env.SRCPATH }}
+          pushd ${{ env.SRCPATH }}
           
-          $env:GO111MODULE="on" 
-          $env:GOOS="$os"
-          $env:GOARCH=$arch
-          go get ./...
-          go build -o ${{ env.SRCPATH }}/monitoring-agent$suffix
-          Pop-Location
-          Copy-Item -Path ${{ env.SRCPATH }}/monitoring-agent$suffix -Destination ./release/$os-$arch-$goversion/monitoring-agent$suffix
+          GO111MODULE=on GOOS=$os GOARCH=$arch go get ./...
+          GO111MODULE=on GOOS=$os GOARCH=$arch go build -o ${{ env.SRCPATH }}/monitoring-agent$suffix
+          popd
+          cp ${{ env.SRCPATH }}/monitoring-agent$suffix ./release/$os-$arch-$goversion/monitoring-agent$suffix
           
       - name: Create Deb
         run: |
