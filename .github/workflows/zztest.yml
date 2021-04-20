@@ -36,7 +36,7 @@ jobs:
           suffix=$([ "$os" == "windows" ] && echo ".exe" || echo "")
           mkdir -p ./release/$os-$arch-$goversion
           cp ${{ env.SRCPATH }}/installService.cmd ${{ env.SRCPATH }}/uninstallService.cmd ${{ env.SRCPATH }}/configuration.ini ${{ env.SRCPATH }}/LICENSE ${{ env.SRCPATH }}/server.crt ${{ env.SRCPATH }}/server.key ${{ env.SRCPATH }}/README.md ${{ env.SRCPATH }}/cacert.pem ./release/$os-$arch-$goversion
-          
+          cp -r ${{ env.SRCPATH }}/DEBIAN ./release/$os-$arch-$goversion
           pushd ${{ env.SRCPATH }}
           
           GO111MODULE=on GOOS=$os GOARCH=$arch go get ./...
@@ -44,15 +44,13 @@ jobs:
           popd
           cp ${{ env.SRCPATH }}/monitoring-agent$suffix ./release/$os-$arch-$goversion/monitoring-agent$suffix
           
+          
       - name: Create Deb
         run: |
-          cd ${{ env.SRCPATH }}/..
-          dpkg-deb --build ${{ env.SRCPATH }}
-          cp ${{ env.SRCPATH }}/../mama.deb ~/monitoring-agent.deb
-          ls -la .
+          dpkg-deb --build ./release/linux-amd64-1.16 ~/linux-amd64-go1.16-monitoring-agent.deb
           
       - name: upload package
         uses: actions/upload-artifact@v2
         with:
-          name: "debian-ubuntu-amd64-1.16.x-${{ steps.short-sha.outputs.sha }}.deb"
-          path: ~/monitoring-agent.deb
+          name: "linux-amd64-go1.16-monitoring-agent-${{ steps.short-sha.outputs.sha }}.deb"
+          path: ~/linux-amd64-go1.16-monitoring-agent.deb
