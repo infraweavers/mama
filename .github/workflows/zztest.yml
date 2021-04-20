@@ -36,7 +36,6 @@ jobs:
           suffix=$([ "$os" == "windows" ] && echo ".exe" || echo "")
           mkdir -p ./release/$os-$arch-$goversion
           cp ${{ env.SRCPATH }}/installService.cmd ${{ env.SRCPATH }}/uninstallService.cmd ${{ env.SRCPATH }}/configuration.ini ${{ env.SRCPATH }}/LICENSE ${{ env.SRCPATH }}/server.crt ${{ env.SRCPATH }}/server.key ${{ env.SRCPATH }}/README.md ${{ env.SRCPATH }}/cacert.pem ./release/$os-$arch-$goversion
-          cp -r ${{ env.SRCPATH }}/DEBIAN ./release/$os-$arch-$goversion
           pushd ${{ env.SRCPATH }}
           
           GO111MODULE=on GOOS=$os GOARCH=$arch go get ./...
@@ -44,10 +43,20 @@ jobs:
           popd
           cp ${{ env.SRCPATH }}/monitoring-agent$suffix ./release/$os-$arch-$goversion/monitoring-agent$suffix
           
+      - name: Create Deb Structure
+        run: |
+          os=linux
+          arch=amd64
+          goversion=1.16
           
+          mkdir -p deb-package/etc/monitoring-agent deb-package/usr/bin
+          cp -r ${{ env.SRCPATH }}/DEBIAN ./deb-package
+          cp ${{ env.SRCPATH }}/configuration.ini ${{ env.SRCPATH }}/server.crt ${{ env.SRCPATH }}/server.key ${{ env.SRCPATH }}/cacert.pem ./deb-package/etc/monitoring-agent
+          cp ./release/$os-$arch-$goversion/monitoring-agent deb-package/usr/bin
+
       - name: Create Deb
         run: |
-          dpkg-deb --build ./release/linux-amd64-1.16 ~/linux-amd64-go1.16-monitoring-agent.deb
+          dpkg-deb --build ./deb-package ~/linux-amd64-go1.16-monitoring-agent.deb
           
       - name: upload package
         uses: actions/upload-artifact@v2
