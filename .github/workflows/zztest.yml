@@ -46,4 +46,5 @@ jobs:
           
       - name: Create Deb
         run: |
-          dpkg-deb --build ./
+          cd ${{ env.SRCPATH }}/..
+          dpkg-deb --build ${{ env.SRCPATH }}
