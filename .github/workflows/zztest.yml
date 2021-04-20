@@ -54,4 +54,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: "debian-ubuntu-amd64-1.16.x-${{ steps.short-sha.outputs.sha }}.deb"
-          path: ${{ env.SRCPATH }}/*.deb
+          path: ${{ env.SRCPATH }}/../mama.deb
