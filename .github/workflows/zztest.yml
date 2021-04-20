@@ -48,7 +48,7 @@ jobs:
         run: |
           cd ${{ env.SRCPATH }}/..
           dpkg-deb --build ${{ env.SRCPATH }}
-          ls ${{ env.SRCPATH }}
+          ls -la .
           
       - name: upload package
         uses: actions/upload-artifact@v2
