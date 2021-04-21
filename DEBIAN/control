@@ -2,8 +2,10 @@ Package: monitoring-agent
 Version: 1.0
 Section: net
 Priority: optional
-Architecture: all
-Essential: no
+Architecture: amd64
 Installed-Size: 1024
+Depends:
+Recommends: monitoring-plugins
 Maintainer: monitoring-agent@codeweavers.net
-Description: Monitoring-Agent
+Description: Cross platform HTTP based monitoring agent, essentially a replacement for nrpe
+  This package contains the agent that enables execution of plugins on the remote server
