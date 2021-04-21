@@ -54,6 +54,8 @@ jobs:
           cp ${{ env.SRCPATH }}/configuration.ini ${{ env.SRCPATH }}/server.crt ${{ env.SRCPATH }}/server.key ${{ env.SRCPATH }}/cacert.pem ./deb-package/etc/monitoring-agent
           cp ./release/$os-$arch-$goversion/monitoring-agent deb-package/usr/bin
           cp ${{ env.SRCPATH }}/monitoring-agent.service deb-package/lib/systemd/system
+
+          sed -i 's|LogFilePath=.*|LogFilePath=/var/log/monitoring-agent.log|' deb-package/etc/configuration.ini
           
           chmod 600 deb-package/etc/monitoring-agent/*
           sudo chown -R root:root deb-package/
