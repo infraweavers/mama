@@ -60,7 +60,7 @@ jobs:
 
       - name: Create Deb
         run: |
-          dpkg-deb --build ./deb-package ~/linux-amd64-go1.16-monitoring-agent.deb
+          sudo dpkg-deb --build ./deb-package ~/linux-amd64-go1.16-monitoring-agent.deb
           
       - name: upload package
         uses: actions/upload-artifact@v2
