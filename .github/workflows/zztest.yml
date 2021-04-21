@@ -55,8 +55,8 @@ jobs:
           cp ./release/$os-$arch-$goversion/monitoring-agent deb-package/usr/bin
           cp ${{ env.SRCPATH }}/monitoring-agent.service deb-package/lib/systemd/system
           
-          sudo chown -R root:root deb-package
           chmod 600 deb-package/etc/monitoring-agent/*
+          sudo chown -R root:root deb-package/
 
       - name: Create Deb
         run: |
