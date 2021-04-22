@@ -1,0 +1,1 @@
+deb-systemd-helper disable monitoring-agent.service >/dev/null || true
