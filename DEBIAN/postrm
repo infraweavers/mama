@@ -1,0 +1,4 @@
+#!/bin/sh
+set -e
+echo "postrm has been executed" > /robtest2
+systemctl daemon-reload
