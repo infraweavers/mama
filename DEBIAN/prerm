@@ -1,3 +1,4 @@
 #!/bin/sh
 set -e
+echo "prerm has been executed" > /robtest
 systemctl stop monitoring-agent || exit 1
